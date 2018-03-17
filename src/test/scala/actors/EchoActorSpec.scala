@@ -1,11 +1,15 @@
 package actors
 
 import akka.actor.ActorSystem
-import akka.testkit.{ ImplicitSender, TestActors, TestKit }
-import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
+import akka.testkit.{ImplicitSender, TestKit}
+import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
-class EchoActorSpec extends TestKit(ActorSystem("MySpec")) with ImplicitSender
-  with WordSpecLike with Matchers with BeforeAndAfterAll {
+class EchoActorSpec
+    extends TestKit(ActorSystem("MySpec"))
+    with ImplicitSender
+    with WordSpecLike
+    with Matchers
+    with BeforeAndAfterAll {
 
   override def afterAll {
     TestKit.shutdownActorSystem(system)
