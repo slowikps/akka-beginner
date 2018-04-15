@@ -19,28 +19,26 @@ class BartenderActorSpec
   }
 
   "An Bartender actor" must {
-    system.eventStream.subscribe(system.actorOf(EchoActor.props), classOf[UnhandledMessage])
+    system.eventStream.subscribe(system.actorOf(EchoActor.props, "debuggingActor"), classOf[UnhandledMessage])
+    val bartender = system.actorOf(BartenderActor.props, "bartender")
 
     "provide me with a beer" in {
-      val bartender = system.actorOf(BartenderActor.props)
+      println(bartender)
       bartender ! BartenderActor.Beer
       expectMsg(Order("This is a beer for you"))
     }
 
     "sent some water when I am hangover" in {
-      val bartender = system.actorOf(BartenderActor.props)
       bartender ! BartenderActor.Water
       expectMsg(Order("Don't get to crazy with this"))
     }
 
     "unusual way of ordering Mojito should be handeled" in {
-      val bartender = system.actorOf(BartenderActor.props)
       bartender ! "Mojito please"
       expectMsg(Order("Here is your Mojito"))
     }
 
     "Sorry - Gin and tonic is not available" in {
-      val bartender = system.actorOf(BartenderActor.props)
       bartender ! "Gin and tonic"
       expectNoMessage()
       TimeUnit.SECONDS.sleep(1)
