@@ -1,7 +1,7 @@
 package actors
 
 import actors.BartenderActor.{Beer, Order, Water}
-import akka.actor.{Actor, Props, UnhandledMessage}
+import akka.actor.{Actor, Props}
 
 object BartenderActor {
   object Beer
