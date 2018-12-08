@@ -1,22 +1,22 @@
 package web
 import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicInteger
 
 import org.apache.cxf.jaxrs.client.WebClient
-import org.apache.cxf.jaxrs.client.ClientConfiguration
-import org.apache.cxf.jaxrs.client.WebClient
-import org.apache.cxf.transport.http.HTTPConduit
-import org.apache.cxf.jaxrs.client.WebClient
 import org.apache.cxf.jaxrs.impl.ResponseImpl
-import sys.process._
+import org.apache.cxf.transport.http.HTTPConduit
+
 import scala.concurrent.{ExecutionContext, Future}
 object ApacheCxfTest extends App {
   println("Start Simulation")
 
   val appStartup = System.currentTimeMillis()
 
+  val port = new AtomicInteger()
+
   protected def createClient(basePath: String): WebClient = {
     val client = WebClient
-      .create("http://localhost:8080")
+      .create(s"http://localhost:808${1 + port.incrementAndGet() % 5}")
       .path(basePath)
     val config = WebClient.getConfig(client)
     val http   = config.getConduit.asInstanceOf[HTTPConduit]
@@ -30,18 +30,18 @@ object ApacheCxfTest extends App {
     val client = createClient(s"/sleep/$sleepDuration").query("name", name)
 
     val reqStartAt = System.currentTimeMillis()
-    println(s"[$name-$sleepDuration] About to send request at ${reqStartAt - appStartup}")
+//    println(s"[$name-$sleepDuration] About to send request at ${reqStartAt - appStartup}")
     val response = client.get.asInstanceOf[ResponseImpl]
 
-    println(
-      s"[$name-$sleepDuration] Got response after ${System.currentTimeMillis() - reqStartAt}, status: ${response.getStatus}")
+//    println(
+//      s"[$name-$sleepDuration] Got response after ${System.currentTimeMillis() - reqStartAt}, status: ${response.getStatus}")
   }
 
-  implicit val ex = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10000))
+  implicit val ex = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(2000))
 
-  for(i <- 1 to 100000) {
+  for(i <- 1 to 1000000) {
     Future {
-      sendRequest(s"pawel-$i", 20000)
+      sendRequest(s"pawel-$i", 2000)
     }
   }
 
