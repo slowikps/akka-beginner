@@ -35,15 +35,16 @@ object SampleServer extends App {
           case 3 => numberOfConnections3
           case 4 => numberOfConnections4
           case 5 => numberOfConnections5
+          case _ => numberOfConnections1
         }
         numberOfConnections.incrementAndGet()
 
         parameters('name) { name =>
           val startTime = System.currentTimeMillis()
-//          println(s"Receiving request from: $name at: $startTime ms")
+          println(s"Receiving request from: $name at: $startTime ms")
           val p = Promise[String]()
           system.scheduler.scheduleOnce(sleep milliseconds) {
-//            println(s"Completing request from: $name after: ${System.currentTimeMillis() - startTime} ms")
+            println(s"Completing request from: $name after: ${System.currentTimeMillis() - startTime} ms")
             p.complete(Success(name))
             numberOfConnections.decrementAndGet()
           }
@@ -61,9 +62,9 @@ object SampleServer extends App {
   system.scheduler.schedule(0 second, 1 second) {
     println(s"Number of connections: ${numberOfConnections1.get()}, ${numberOfConnections2.get()}, ${numberOfConnections3.get()}, ${numberOfConnections4.get()}, ${numberOfConnections5.get()}")
   }
-  for (i <- 1 to 5) {
+  for (i <- 1 to 10) {
     println(i)
-    Http().bindAndHandle(route(i), "localhost", 8080 + i)
+    Http().bindAndHandle(route(i%6), "localhost", 8080 + i)
   }
 
 

@@ -7,11 +7,11 @@ val akkaDependencies = Seq(
   "com.typesafe.akka" %% "akka-actor",
   "com.typesafe.akka" %% "akka-stream",
   "com.typesafe.akka" %% "akka-testkit"
-) map (_ % "2.5.18")
+) map (_ % "2.5.19")
 
 val akkaHttpDependencies = Seq(
   "com.typesafe.akka" %% "akka-http"
-) map (_ % "10.1.5")
+) map (_ % "10.1.6")
 
 val apacheCxfCatalogVersion = Seq(
   "org.apache.cxf" % "cxf-rt-frontend-jaxws",
